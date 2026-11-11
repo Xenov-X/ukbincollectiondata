@@ -2949,13 +2949,12 @@ Note: Pass the UPRN. You can find it using [FindMyAddress](https://www.findmyadd
 
 ### Northumberland
 ```commandline
-python collect_data.py NorthumberlandCouncil https://bincollection.northumberland.gov.uk/postcode -s -u XXXXXXXX -p "XXXX XXX" -w http://HOST:PORT/
+python collect_data.py NorthumberlandCouncil https://bincollection.northumberland.gov.uk/postcode -s -u XXXXXXXX -p "XXXX XXX"
 ```
 Additional parameters:
 - `-s` - skip get URL
 - `-u` - UPRN
 - `-p` - postcode
-- `-w` - remote Selenium web driver URL (required for Home Assistant)
 
 Note: Pass the UPRN. You can find it using [FindMyAddress](https://www.findmyaddress.co.uk/search).
 
