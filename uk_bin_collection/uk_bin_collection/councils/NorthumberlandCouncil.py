@@ -121,6 +121,11 @@ class CouncilClass(AbstractGetBinDataClass):
             dict: A dictionary with a "bins" key mapping to a list of entries,
             each with a "type" (e.g. "General waste", "Recycling",
             "Garden waste") and a "collectionDate" in the module's date_format.
+
+        Raises:
+            ValueError: if the postcode or UPRN is not recognised, the council
+            has no upcoming collections for the address, or the page layout
+            has changed.
         """
         user_postcode = kwargs.get("postcode")
         user_uprn = kwargs.get("uprn")
@@ -183,12 +188,15 @@ class CouncilClass(AbstractGetBinDataClass):
             collections = self.parse_rows(results_soup, now)
 
         if not collections:
-            # An address with no rounds is a legitimate answer, not a fault.
+            # The council has no round data for some addresses (new builds,
+            # for example). Say so, rather than blaming the page layout.
             if any(
                 NO_COLLECTIONS_MARKER in " ".join(p.get_text().split()).lower()
                 for p in pages
             ):
-                return {"bins": []}
+                raise ValueError(
+                    f"Northumberland has no upcoming collections for UPRN {user_uprn}"
+                )
             raise ValueError(
                 "No collection rows found; the page layout may have changed"
             )
